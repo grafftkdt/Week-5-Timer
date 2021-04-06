@@ -65,6 +65,7 @@ float MeanTime =0;
 
 //for microsecond measurement
 uint64_t _micros =0;
+float RPM = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -449,7 +450,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void encoderSpeedReaderCycle() {
 	//get DMA Position form number of data
-	uint32_t CapPos =CAPTURENUM -  __HAL_DMA_GET_COUNTER(htim1.hdma[TIM_DMA_ID_CC1]);
+	uint32_t CapPos =CAPTURENUM - __HAL_DMA_GET_COUNTER(htim1.hdma[TIM_DMA_ID_CC1]);
 	uint32_t sum = 0 ;
 
 	//calculate diff from all buffer
@@ -467,6 +468,7 @@ void encoderSpeedReaderCycle() {
 
 	//mean all 15 Diff
 	MeanTime =sum / (float)(CAPTURENUM-1);
+	RPM = 1000000*60/(MeanTime*768);
 }
 uint64_t micros()
 {
